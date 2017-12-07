@@ -1,0 +1,8 @@
+ctn-registry::config::port: 5000
+ctn-registry::config::rootdirectory: '/home/registry'
+ctn-registry::config::delete_enable: true
+ctn-registry::config::rootcertbundle: '/certs/server.crt'
+ctn-registry::config::rootcertbundle_key: '/certs/server.key'
+ctn-registry::install::nfs_mount: 'puppetmaster.labstuff.com:/registry'
+ctn-registry::config::redis_enable: false
+test-helloworld::testvar: 'one'

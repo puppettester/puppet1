@@ -1,0 +1,19 @@
+version: 0.1
+log:
+  formatter: json
+  fields:
+    service: registry
+http:
+  addr: :<%= @port %>
+  headers:
+    X-Content-Type-Options: [nosniff]
+  secret: <%= @http_secret %>
+storage:
+  filesystem:
+    rootdirectory: <%= @rootdirectory %>
+  cache:
+    blobdescriptor: <% if redis_enable %>redis<% else %>inmemory<% end %>
+<% if delete_enable -%>
+  delete:
+    enabled: true
+<% end -%>

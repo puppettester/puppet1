@@ -33,7 +33,7 @@ class ctn-docker::home {
 }
 
 # 'apt-transport-https' package is needed to refresh the apt repository, observed OVH Debian 8 default image doesn't have this package and apt-updates are failing as a result
-# install_options of '--allow-unauthenticated', '-f' added as apt-transport-https depends on libcurl3-gnutls which couldn't be authenticated 
+# install_options of '--allow-unauthenticated', '-f' added as apt-transport-https depends on libcurl3-gnutls which couldn't be authenticated
 class ctn-docker::apthttps {
 	package { 'apt-transport-https':
 		name => 'apt-transport-https',
@@ -44,10 +44,20 @@ class ctn-docker::apthttps {
 
 class ctn-docker::install {
     class { 'docker':
-        version                     => "1.12.1-0~jessie",
+
+        case $::fqdn {
+            /\agent\/: {
+              $version = hiera('ctn-docker::install::admin_host::version')
+            }
+            default: {
+              $version = hiera('ctn-docker::install::version')
+            }
+        }
+
+        version                     => $version,
         iptables                    => false,
         storage_driver              => 'overlay2',
         log_driver                  => 'journald',
-	require 		    => Class['ctn-docker::apthttps', 'ctn-docker::home', 'ctn-docker::overlay'],
+	      require 		    => Class['ctn-docker::apthttps', 'ctn-docker::home', 'ctn-docker::overlay'],
     }
 }
